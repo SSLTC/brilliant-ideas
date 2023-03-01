@@ -13,7 +13,8 @@ const showIdeas = (ideas) => {
     elParagraph.innerText = idea.description;
     const elButtonDelete = document.createElement("button");
     elButtonDelete.innerText = "Delete";
-    elButtonDelete.setAttribute("ideaID", idea.id);
+    elButtonDelete.setAttribute("value", idea.id);
+    elButtonDelete.addEventListener("click", deleteIdea);
     elDiv.append(elH2, elParagraph, elButtonDelete);
     document.body.appendChild(elDiv);
   });
@@ -25,3 +26,23 @@ const goto = (event) => {
 
 const elButtonAdd = document.querySelector("#addIdea");
 elButtonAdd.addEventListener("click", goto);
+
+const deleteIdea = async (event) => {
+  let userConfirm = confirm(
+    "Are you sure to delete " + event.target.parentNode.firstChild.innerText
+  );
+  if (userConfirm) {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: event.target.value,
+      }),
+    };
+
+    const response = await fetch("http://localhost:3000/delete-idea", options);
+    const data = await response.json();
+  }
+};

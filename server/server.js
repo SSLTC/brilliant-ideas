@@ -39,15 +39,16 @@ app.get("/show-ideas", async (req, res) => {
 app.post("/new-idea", async (req, res) => {
   let { title, description } = req.body;
   await queryDatabase(
-    `INSERT INTO brilliant_minds.ideas (title, description) VALUES ('${title}', '${description}')`
+    `CALL brilliant_minds.insert_idea('${title}', '${description}');`
+    // `INSERT INTO brilliant_minds.ideas (title, description) VALUES ('${title}', '${description}')`
   );
   res.end;
 });
 
-app.post("/delete-idea", (req, res) => {
-  // database connection
-  // execute query
-  // send response with data
+app.post("/delete-idea", async (req, res) => {
+  let { id } = req.body;
+  await queryDatabase(`DELETE FROM brilliant_minds.ideas WHERE id = ${id};`);
+  res.end;
 });
 
 app.use((request, response, next) => {
