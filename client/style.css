@@ -1,0 +1,19 @@
+body {
+  margin: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.8rem;
+  display: block;
+}
+body .containerPerIdea {
+  margin-block: 0.4rem;
+  padding: 0.4rem;
+  background-color: #aa6fd4;
+}
+body .button {
+  display: inline;
+  margin-right: 0.2rem;
+}
+body .inputField {
+  display: block;
+  margin-block: 0.4rem;
+}/*# sourceMappingURL=style.css.map */

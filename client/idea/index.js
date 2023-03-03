@@ -26,12 +26,21 @@ const addIdea = async (event) => {
   if (typeof data.err != "undefined") {
     document.querySelector("#validation").innerText = data.err;
   } else {
-    location.replace("./");
+    if (typeof params.get("id") == null) {
+      location.replace("../#" + data.insertId);
+    } else {
+      location.replace("../#" + params.get("id"));
+    }
   }
 };
 
 const elButtonAdd = document.querySelector("#addIdea");
 elButtonAdd.addEventListener("click", addIdea);
+
+const elButtonCancel = document.querySelector("#cancel");
+elButtonCancel.addEventListener("click", () => {
+  location.replace("../");
+});
 
 if (params.get("action") == "update") {
   document.querySelector("h1").innerText = "Update Idea";
