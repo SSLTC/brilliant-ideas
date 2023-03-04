@@ -32,7 +32,7 @@ const queryDatabase = async (query) => {
 
 app.get("/show-ideas", async (req, res) => {
   const data = await queryDatabase(
-    `SELECT title, description, id FROM brilliant_minds.ideas`
+    `SELECT title, description, id FROM brilliant_minds.ideas ORDER BY id DESC`
   );
   res.send(data);
 });
@@ -57,7 +57,17 @@ app.post("/new-idea", checkInput, async (req, res) => {
   let { title, description } = req.body;
   const data = await queryDatabase(
     `CALL brilliant_minds.insert_idea('${title}', '${description}');`
-    // `INSERT INTO brilliant_minds.ideas (title, description) VALUES ('${title}', '${description}')`
+    /* CREATE PROCEDURE brilliant_minds.insert_idea(IN title VARCHAR(255), IN description TEXT)
+    BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+      BEGIN
+              SELECT CONCAT(title, ' and/or ', description, ' is not valid');
+      END;
+    SET @sql = CONCAT('INSERT INTO brilliant_minds.ideas (title, description) VALUES (\'',title,'\', \'',description,'\')');
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    END */
   );
   res.json({ affectedRows: data.affectedRows });
 });
@@ -66,6 +76,19 @@ app.post("/update-idea", checkInput, async (req, res) => {
   let { title, description, id } = req.body;
   const data = await queryDatabase(
     `CALL brilliant_minds.update_idea('${title}', '${description}', ${id});`
+    /* CREATE PROCEDURE brilliant_minds.update_idea(IN title VARCHAR(255), IN description TEXT, IN id SMALLINT(6))
+    BEGIN
+      DECLARE EXIT HANDLER FOR SQLEXCEPTION
+            BEGIN
+                    SELECT CONCAT(title, ' and/or ', description, ' is not valid');
+            END;
+
+      SET @sql = CONCAT('UPDATE brilliant_minds.ideas SET title=\'',title,'\', description=\'',description,'\' WHERE id=',id);
+
+      PREPARE stmt FROM @sql;
+      EXECUTE stmt;
+      DEALLOCATE PREPARE stmt;
+    END */
   );
   res.json({ affectedRows: data.affectedRows });
 });

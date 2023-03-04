@@ -35,12 +35,10 @@ const showIdeas = (ideas) => {
   }
 };
 
-const goto = (event) => {
-  window.location.href = "./idea";
-};
-
 const elButtonAdd = document.querySelector("#addIdea");
-elButtonAdd.addEventListener("click", goto);
+elButtonAdd.addEventListener("click", () => {
+  window.location.href = "./idea";
+});
 
 const updateIdea = async (event) => {
   location.href = "./idea/?action=update&id=" + event.target.value;
